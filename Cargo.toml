@@ -1,0 +1,19 @@
+[package]
+name = "link"
+version = "0.0.1"
+authors = ["yngtodd <young.todd.mk@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "link"
+crate-type = ["cdylib"]
+
+[dependencies.pyo3]
+version = "0.13.1"
+features = ["extension-module"]
+
+[target.x86_64-apple-darwin]
+rustflags = [
+  "-C", "link-arg=-undefined",
+  "-C", "link-arg=dynamic_lookup",
+]
