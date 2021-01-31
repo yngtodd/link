@@ -1,3 +1,4 @@
+from setuptools import setup
 from setuptools_rust import (
     RustExtension, Binding
 )
@@ -37,7 +38,7 @@ setup(
     include_package_data=True,
     keywords='link',
     name='link',
-    rust_extensions=[RustExtension("tok", "Cargo.toml", debug=False)],
+    rust_extensions=[RustExtension("link", "Cargo.toml", debug=False)],
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
