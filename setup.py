@@ -10,12 +10,8 @@ with open('README.md') as readme_file:
 
 setup_requirements = ['pytest-runner', ]
 test_requirements = ['pytest>=3', ]
-requirements = ['argh',]
+requirements = []
 
-
-COMMANDS = [
-    'greet = link.cli:greet',
-]
 
 setup(
     author="Todd Young",
@@ -31,7 +27,6 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     description="A linked list written in Rust for Python.",
-    entry_points={'console_scripts': COMMANDS},
     install_requires=requirements,
     license="BSD license",
     long_description=readme,
