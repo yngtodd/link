@@ -1,4 +1,3 @@
-use std::mem;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -24,7 +23,7 @@ impl List {
     pub fn push(&mut self, elem: i32) {
         let node = Box::new(Node {
             elem: elem,
-            next: mem::replace(&mut self.head, None),
+            next: self.head.take(),
         });
 
         self.head = Some(node);
@@ -36,24 +35,21 @@ impl List {
     /// returns the final node's element and set the list's 
     /// head to the next node.
     pub fn pop(&mut self) -> Option<i32> {
-        match mem::replace(&mut self.head, None) {
-            None => None,
-            Some(node) => {
-                self.head = node.next;
-                Some(node.elem)
-            }
-        }
+        self.head.take().map(|node| {
+            self.head = node.next;
+            node.elem
+        })
     }
 }
 
 impl Drop for List {
     fn drop(&mut self) {
-        let mut cur_link = mem::replace(&mut self.head, None);
+        let mut cur_link = self.head.take();
         // If the link has a next node, replace that link with an empty  link,
         // and go to the next link. We will do this for all nodes, and the 
         // list will finally go out of scope here.
         while let Some(mut boxed_node) = cur_link {
-            cur_link = mem::replace(&mut boxed_node.next, None)
+            cur_link = boxed_node.next.take() 
         }
     }
 }
