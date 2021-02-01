@@ -1,26 +1,26 @@
 use pyo3::prelude::*;
 
 #[pyclass]
-pub struct List {
-    head: Link,
+pub struct List<T> {
+    head: Link<T>,
 }
 
-type Link = Option<Box<Node>>;
+type Link<T> = Option<Box<Node<T>>>;
 
-struct Node {
-    elem: i32,
-    next: Link,
+struct Node<T> {
+    elem: T,
+    next: Link<T>,
 }
 
 #[pymethods]
-impl List {
+impl<T> List<T> {
     #[new]
     pub fn new() -> Self {
         List { head: None }
     }
 
     /// Push an element to the list
-    pub fn push(&mut self, elem: i32) {
+    pub fn push(&mut self, elem: T) {
         let node = Box::new(Node {
             elem: elem,
             next: self.head.take(),
@@ -34,7 +34,7 @@ impl List {
     /// Returns `None` if the list is empty, otherwise
     /// returns the final node's element and set the list's 
     /// head to the next node.
-    pub fn pop(&mut self) -> Option<i32> {
+    pub fn pop(&mut self) -> Option<T> {
         self.head.take().map(|node| {
             self.head = node.next;
             node.elem
@@ -42,7 +42,7 @@ impl List {
     }
 }
 
-impl Drop for List {
+impl<T> Drop for List<T> {
     fn drop(&mut self) {
         let mut cur_link = self.head.take();
         // If the link has a next node, replace that link with an empty  link,
@@ -55,7 +55,7 @@ impl Drop for List {
 }
 
 #[pymodule]
-fn link(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    m.add_class::<List>()?;
+fn link<T>(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    m.add_class::<List<T>>()?;
     Ok(())
 }
