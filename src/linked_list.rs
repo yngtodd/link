@@ -62,7 +62,7 @@ impl Drop for List {
 }
 
 #[pymodule]
-fn linked_list(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn link(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<List>()?;
     Ok(())
 }
